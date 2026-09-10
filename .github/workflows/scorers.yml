@@ -1,13 +1,18 @@
 name: Refresh data
 
-# Aktualisiert alle ~10 Min (frei & schlüssellos, KEIN Secret nötig):
+# Aktualisiert (frei & schlüssellos, KEIN Secret nötig):
 #  - data/scorers.json         Torschützenliste (fussballdaten + football-data)
 #  - data/penalty-results.json korrekte Elfer-Endstände (fussballdaten "n.E.")
-# Hinweis: GitHubs Cron ist "best effort" und kann sich verzögern.
+#
+# Die WM 2026 ist beendet: der 10-Minuten-Cron ist deaktiviert (die Quellseiten
+# liefern keine aktuellen Turnierdaten mehr und der Lauf schlug nur noch fehl).
+# Der Endstand steckt bereits fest in data/tippspiel.json. Für eine künftige WM
+# einfach den auskommentierten Cron wieder aktivieren; bis dahin lässt sich der
+# Workflow bei Bedarf weiterhin manuell über workflow_dispatch anstoßen.
 
 on:
-  schedule:
-    - cron: '*/10 * * * *'
+  # schedule:
+  #   - cron: '*/10 * * * *'
   workflow_dispatch: {}
 
 permissions:

@@ -86,7 +86,10 @@ test('Offline-Modus: alle Ansichten rendern', async () => {
   await waitFor(() => doc.querySelectorAll('#view-spiele .match-card').length > 0);
 
   assert.equal(doc.querySelectorAll('#view-spiele .match-card').length, 104);
-  assert.ok(doc.querySelector('.banner'), 'Offline-Banner sichtbar');
+  // Turnier ist beendet -> kein "Live-Daten noch nicht verbunden"-Hinweis mehr,
+  // stattdessen der Siegerehrungs-Banner.
+  assert.ok(doc.querySelector('.celebrate-banner'), 'Siegerehrungs-Banner statt Offline-Hinweis');
+  assert.ok(!doc.getElementById('view-spiele').textContent.includes('Live-Daten noch nicht verbunden'));
   assert.equal(doc.querySelectorAll('#view-tabelle tbody tr').length, 72);
   assert.equal(doc.querySelectorAll('#view-familien .family-card').length, 14);
   // Torjäger: Schreibweisen werden unter vollem Namen zusammengeführt
@@ -96,7 +99,7 @@ test('Offline-Modus: alle Ansichten rendern', async () => {
   assert.ok(!tj.includes('Getippte Torjäger ohne WM-Tor'),
     'keine verwaisten Schreibweisen mehr: ' + tj.slice(0, 300));
   assert.ok(doc.querySelectorAll('#view-torjaeger .scorer-row').length >= 13);
-  assert.equal(doc.getElementById('status-text').textContent, 'Offline-Modus');
+  assert.equal(doc.getElementById('status-text').textContent, 'Endstand · WM beendet');
 
   // Spiel aufklappen -> Tipps erscheinen
   doc.querySelector('#view-spiele .match-row').click();

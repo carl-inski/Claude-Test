@@ -506,8 +506,10 @@
     $('#footer-source').textContent = CFG.proxyUrl
       ? 'Live-Daten: football-data.org · Aktualisierung alle ' +
         (CFG.livePollSeconds || CFG.pollSeconds || 20) + ' s während laufender Spiele'
-      : 'Offline-Modus: Stände aus der Excel-Datei' +
-        (Object.keys(state.manual).length ? ' + manuelle Ergebnisse' : '');
+      : tournamentFinished()
+        ? 'Endstand: WM 2026 ist beendet – gespeicherter Stand aus der finalen Excel.'
+        : 'Offline-Modus: Stände aus der Excel-Datei' +
+          (Object.keys(state.manual).length ? ' + manuelle Ergebnisse' : '');
   }
 
   function renderStatus() {
@@ -515,7 +517,7 @@
     const txt = $('#status-text');
     if (!CFG.proxyUrl) {
       dot.className = 'status-dot offline';
-      txt.textContent = 'Offline-Modus';
+      txt.textContent = tournamentFinished() ? 'Endstand · WM beendet' : 'Offline-Modus';
       return;
     }
     const timeStr = (d) => d.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
@@ -576,7 +578,7 @@
     if (tournamentFinished()) view.appendChild(celebrationBanner());
     if (hasSim()) view.appendChild(simBanner());
 
-    if (!CFG.proxyUrl) {
+    if (!CFG.proxyUrl && !tournamentFinished()) {
       const b = el('div', 'banner');
       b.innerHTML = window.Icons.svg('info') + ' <strong>Live-Daten noch nicht verbunden.</strong> ' +
         'Sobald der Daten-Proxy in <code>js/config.js</code> eingetragen ist, ' +
